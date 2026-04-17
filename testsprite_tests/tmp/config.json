@@ -1,0 +1,18 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "executionArgs": {
+    "projectName": "kbt_project",
+    "projectPath": "c:\\Users\\mhyas\\VolumeD\\kbt_project",
+    "testIds": [],
+    "additionalInstruction": "logic logic 10625857049083285720",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-pbJ8LiqQRnsZK-M6f_13oiOA5Y2H6UyaYX3Fa9QCJS_xpfGxW_OuCNN06PvHRlIbwJJri7Vw96Y8CJ5lWXaQcranncUO-7VILGYJoCDQQ1dc0JdVoi9Hs471xgazsofk1pc"
+    }
+  },
+  "serverPort": 59941,
+  "proxy": "http://8ae001a5-f13b-4493-96b2-d0c5d27aa74b:y46KSJ3Djem0cWItrAF3p6z5ewewlzrg@tun.testsprite.com:8080"
+}

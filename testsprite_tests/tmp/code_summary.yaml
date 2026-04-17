@@ -1,0 +1,100 @@
+version: "2"
+type: frontend
+tech_stack:
+  - Next.js (App Router)
+  - React 19
+  - Supabase
+  - Tailwind CSS
+  - Lucide Icons
+  - Radix UI
+routes:
+  - path: /
+    file: app/page.tsx
+    auth_required: true
+    description: Main dashboard overview
+  - path: /login
+    file: app/login/page.tsx
+    auth_required: false
+    description: User authentication page
+  - path: /ops
+    file: app/ops/page.tsx
+    auth_required: true
+    description: Operations, attendance, and payroll management
+  - path: /inventory
+    file: app/inventory/page.tsx
+    auth_required: true
+    description: Inventory and material management
+  - path: /finance
+    file: app/finance/page.tsx
+    auth_required: true
+    description: Financial reporting and invoices
+  - path: /admin
+    file: app/admin/page.tsx
+    auth_required: true
+    description: Administrative settings and user management
+features:
+  - name: User Authentication
+    description: Login and session management using Supabase
+    files:
+      - app/login/page.tsx
+      - components/AppLayout.tsx
+      - components/ProfileDrawer.tsx
+    entry_route: /login
+    user_interactions:
+      - Enter email and password
+      - Click Sign In
+      - Open profile drawer and click Sign Out
+  - name: Workforce Operations
+    description: Daily attendance, shift closing, and payroll configuration
+    files:
+      - app/ops/page.tsx
+      - components/AttendanceLogsModal.tsx
+      - components/EndShiftModal.tsx
+      - components/AddEmployeeSalaryModal.tsx
+      - components/SalaryDetailModal.tsx
+    entry_route: /ops
+    user_interactions:
+      - Toggle between Attendance, Payroll, and Payments tabs
+      - Click End Shift to close daily operations
+      - View and sort attendance logs (Present, Absent, On Leave)
+      - Configure and view detailed payroll distribution (PF, Medical)
+  - name: Inventory Management
+    description: Tracking material stocks and catalog
+    files:
+      - app/inventory/page.tsx
+      - components/UpdateStockModal.tsx
+      - components/NewMaterialModal.tsx
+    entry_route: /inventory
+    user_interactions:
+      - View stock levels and categories
+      - Update material quantities
+      - Add new materials to the catalog
+  - name: Financial Reporting
+    description: Invoice generation and transaction audit reports
+    files:
+      - app/finance/page.tsx
+      - components/NewInvoiceModal.tsx
+      - components/TransactionReportModal.tsx
+    entry_route: /finance
+    user_interactions:
+      - Create new invoices with multiple line items
+      - Generate full transaction reports with date range filtering
+      - Export reports and receipts to PDF
+  - name: AI Assistant
+    description: Context-aware construction data analysis
+    files:
+      - components/FloatingAssistant.tsx
+      - app/api/chat/route.ts
+    user_interactions:
+      - Ask questions about inventory or attendance
+      - Receive data-driven insights
+known_limitations:
+  - issue: Global search is decorative
+    location: components/AppLayout.tsx
+    impact: Search input doesn't return results
+  - issue: Some Admin actions are UI-only
+    location: app/admin/page.tsx
+    impact: Manage Staff and Site Configuration buttons are placeholders
+  - issue: Some save actions are mocked
+    location: components/NewMaterialModal.tsx
+    impact: Data is not persisted to Supabase database yet

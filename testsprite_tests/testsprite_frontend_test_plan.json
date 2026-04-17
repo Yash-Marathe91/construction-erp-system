@@ -1,0 +1,1023 @@
+[
+  {
+    "id": "TC001",
+    "title": "Sign in to reach the dashboard",
+    "description": "Verifies a user can sign in from the login page and land on the authenticated dashboard successfully.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the dashboard"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Sign in and land on the dashboard with key metrics visible",
+    "description": "Verifies that an authenticated user can sign in and reach the main dashboard where key overview metrics are displayed.",
+    "category": "Authentication & Session",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify key dashboard metrics are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Dashboard loads key overview metrics",
+    "description": "Verifies the dashboard loads for an authenticated user and shows key metrics across operations, inventory, and finance.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify overview metrics for operations, inventory, and finance are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Protected route requires login when logged out",
+    "description": "Verifies that attempting to access a protected page while logged out routes the user to the login page.",
+    "category": "Authentication & Session",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /ops"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is redirected to the login page"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Sign out redirects to login and ends the session",
+    "description": "Verifies that a user can sign out from the app and is returned to the login page with the session ended.",
+    "category": "Authentication & Session",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the user profile drawer"
+      },
+      {
+        "type": "action",
+        "description": "Sign out"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the login page"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Session-gated navigation across main modules works when signed in",
+    "description": "Verifies that a signed-in user can access Ops, Inventory, Finance, and Admin pages via in-app navigation without being redirected to login.",
+    "category": "Authentication & Session",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to operations"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to inventory"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to finance"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to admin"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the admin page content is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Close the shift from Ops",
+    "description": "Verifies a supervisor can end the shift from the Attendance tab, confirm the action, and see a shift-closed status.",
+    "category": "Workforce Operations",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to open Operations"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the Attendance tab"
+      },
+      {
+        "type": "action",
+        "description": "Trigger End Shift"
+      },
+      {
+        "type": "action",
+        "description": "Confirm end shift"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a shift closed status is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Create an invoice with multiple line items and see it in the invoice list",
+    "description": "Verifies that a user can create an invoice with multiple line items and required metadata and then see the invoice in the invoices list.",
+    "category": "Financial Reporting & Invoicing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to finance"
+      },
+      {
+        "type": "action",
+        "description": "Open the new invoice form"
+      },
+      {
+        "type": "action",
+        "description": "Add the first invoice line item with valid description and amount"
+      },
+      {
+        "type": "action",
+        "description": "Add an additional invoice line item with valid description and amount"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Test Recipient Co.\" into the recipient field"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid invoice date"
+      },
+      {
+        "type": "action",
+        "description": "Save the invoice"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new invoice appears in the invoice list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Inventory update cycle: update material quantity and see updated stock level",
+    "description": "Verifies that a user can update an existing material quantity and see the stock level updated in the inventory list.",
+    "category": "Inventory Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to inventory"
+      },
+      {
+        "type": "action",
+        "description": "Select a material from the inventory list"
+      },
+      {
+        "type": "action",
+        "description": "Open the update stock dialog for the selected material"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid updated quantity into the quantity field"
+      },
+      {
+        "type": "action",
+        "description": "Save the stock update"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected material shows the updated stock level in the inventory list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Sign out returns user to login",
+    "description": "Verifies an authenticated user can sign out from the profile drawer and is returned to the login page.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the profile drawer"
+      },
+      {
+        "type": "action",
+        "description": "Sign out"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is on the login page"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Generate transaction report with date range and export to PDF",
+    "description": "Verifies that a user can filter transactions by a valid date range, generate a report, and export it to a PDF file.",
+    "category": "Financial Reporting & Invoicing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to finance"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid start date in the report date range"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid end date in the report date range"
+      },
+      {
+        "type": "action",
+        "description": "Generate the transaction report"
+      },
+      {
+        "type": "action",
+        "description": "Export the report to PDF"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a PDF export is initiated"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Sort attendance logs to present workers",
+    "description": "Verifies a supervisor can view attendance logs in Ops and sort/filter the view to show Present status entries.",
+    "category": "Workforce Operations",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to open Operations"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the Attendance tab"
+      },
+      {
+        "type": "action",
+        "description": "Sort or filter attendance by Present"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the attendance view is showing Present entries"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Add a new material with name and unit and see it listed",
+    "description": "Verifies that a user can add a new material by providing required fields and the new material appears in the catalog list.",
+    "category": "Inventory Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to inventory"
+      },
+      {
+        "type": "action",
+        "description": "Open the new material form"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Test Material A\" into the material name field"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid unit for the material"
+      },
+      {
+        "type": "action",
+        "description": "Save the new material"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a new material entry is displayed in the catalog list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Access admin settings and view administrative sections",
+    "description": "Verifies that an authenticated user can navigate to the Admin page and see the administrative sections for management and configuration.",
+    "category": "Admin Settings",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to Admin"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify administrative sections for user management and site configuration are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC015",
+    "title": "Add payroll configuration and view it in payroll list",
+    "description": "Verifies a user can add a payroll configuration with base salary, PF, and medical amounts and see it reflected in the payroll list.",
+    "category": "Workforce Operations",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to open Operations"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the Payroll tab"
+      },
+      {
+        "type": "action",
+        "description": "Open salary configuration"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid base salary amount into the base salary field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid PF amount into the PF field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid medical amount into the medical field"
+      },
+      {
+        "type": "action",
+        "description": "Save payroll configuration"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new payroll configuration appears in the payroll list"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC016",
+    "title": "Ask AI assistant for a site summary from dashboard",
+    "description": "Verifies an authenticated user can open the floating assistant on the dashboard and receive a response to a site summary question.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the floating assistant"
+      },
+      {
+        "type": "action",
+        "description": "Fill a high-level site summary question into the assistant input"
+      },
+      {
+        "type": "action",
+        "description": "Send the assistant message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the assistant displays a response"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC017",
+    "title": "Ask the AI assistant a dashboard question and receive an in-app response",
+    "description": "Verifies that a signed-in user can open the floating assistant, ask a domain question, and receive a visible response in the assistant thread.",
+    "category": "AI Assistant",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the floating assistant"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"What materials are low right now?\" into the assistant message input"
+      },
+      {
+        "type": "action",
+        "description": "Send the assistant message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an assistant response message is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC018",
+    "title": "Open payroll configuration details after adding",
+    "description": "Verifies a user can open the salary detail modal from a payroll list entry and see configuration details.",
+    "category": "Workforce Operations",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to open Operations"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the Payroll tab"
+      },
+      {
+        "type": "action",
+        "description": "Open salary configuration"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid base salary amount into the base salary field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid PF amount into the PF field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid medical amount into the medical field"
+      },
+      {
+        "type": "action",
+        "description": "Save payroll configuration"
+      },
+      {
+        "type": "action",
+        "description": "Open the details view for the newly created payroll configuration"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a salary detail modal is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC019",
+    "title": "New material validation: missing unit prevents saving",
+    "description": "Verifies that attempting to save a new material without selecting a unit shows a validation error and does not complete the add flow.",
+    "category": "Inventory Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to inventory"
+      },
+      {
+        "type": "action",
+        "description": "Open the new material form"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Test Material Missing Unit\" into the material name field"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to save the new material"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a unit validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC020",
+    "title": "Required-field validation on login",
+    "description": "Verifies submitting the login form with missing required credentials shows a validation error and does not sign the user in.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a required-field validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC021",
+    "title": "Trigger Manage Staff placeholder action",
+    "description": "Verifies that an authenticated user can trigger the Manage Staff action and sees a placeholder indicating the action is UI-only.",
+    "category": "Admin Settings",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to Admin"
+      },
+      {
+        "type": "action",
+        "description": "Trigger the Manage Staff action"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a placeholder indicating the action is UI-only is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC022",
+    "title": "Trigger Site Configuration placeholder action",
+    "description": "Verifies that an authenticated user can trigger the Site Configuration action and sees a placeholder indicating the action is UI-only.",
+    "category": "Admin Settings",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to Admin"
+      },
+      {
+        "type": "action",
+        "description": "Trigger the Site Configuration action"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a placeholder indicating the action is UI-only is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC023",
+    "title": "Payroll base salary is required",
+    "description": "Verifies attempting to save payroll configuration without a base salary shows a validation error and does not save.",
+    "category": "Workforce Operations",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to open Operations"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the Payroll tab"
+      },
+      {
+        "type": "action",
+        "description": "Open salary configuration"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid PF amount into the PF field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid medical amount into the medical field"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to save payroll configuration"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a base salary required validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC024",
+    "title": "Admin navigation works from dashboard header layout",
+    "description": "Verifies that an authenticated user can reach the Admin page via the primary app layout navigation from the dashboard.",
+    "category": "Admin Settings",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to Dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to Admin"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the Admin page with administrative sections visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC025",
+    "title": "Admin page remains usable after interacting with placeholders",
+    "description": "Verifies that after triggering admin placeholder actions, the Admin page remains usable and the main sections are still accessible.",
+    "category": "Admin Settings",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_USER}} into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to Admin"
+      },
+      {
+        "type": "action",
+        "description": "Trigger the Manage Staff action"
+      },
+      {
+        "type": "action",
+        "description": "Dismiss the placeholder dialog or message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the administrative sections are still displayed and actionable"
+      }
+    ],
+    "priority": "Low"
+  }
+]
