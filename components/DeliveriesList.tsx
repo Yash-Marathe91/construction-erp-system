@@ -7,10 +7,11 @@ import { DeliveryDetailModal } from "./DeliveryDetailModal";
 
 interface Delivery {
   id: string;
-  name: string;
-  expected: string;
+  material_name: string;
+  expected_arrival: string;
   supplier: string;
   status: string;
+  quantity?: number;
 }
 
 interface DeliveriesListProps {

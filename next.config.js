@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    allowedDevOrigins: ['10.215.43.175'],
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'pollinations.ai',
+            },
+        ],
+    },
 };
 
 module.exports = nextConfig;

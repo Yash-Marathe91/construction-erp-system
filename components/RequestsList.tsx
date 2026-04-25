@@ -8,10 +8,11 @@ import { RequestDetailModal } from "./RequestDetailModal";
 
 interface RequestItem {
   id: string;
-  name: string;
+  material_name: string;
   requester: string;
   priority: string;
   status: string;
+  quantity?: string;
 }
 
 interface RequestsListProps {
@@ -39,7 +40,7 @@ export function RequestsList({ requests }: RequestsListProps) {
                     <ClipboardList className="w-6 h-6 text-[#45474c]" />
                   </div>
                   <div>
-                    <h3 className="font-heading font-bold text-[#182232] text-lg">{req.name}</h3>
+                    <h3 className="font-heading font-bold text-[#182232] text-lg">{req.material_name}</h3>
                     <p className="text-[10px] text-gray-400 font-sans font-bold uppercase tracking-tighter">Req by: {req.requester} • ID: {req.id}</p>
                   </div>
                 </div>
