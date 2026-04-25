@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Hammer, Box, CircleDollarSign, ShieldHalf, QrCode } from "lucide-react";
+import { LayoutDashboard, Hammer, Box, CircleDollarSign, ShieldHalf, QrCode, Palette } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FloatingAssistant } from "./FloatingAssistant";
 import { useState } from "react";
@@ -12,7 +12,8 @@ import { QRScannerModal } from "./QRScannerModal";
 const navItems = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Ops", href: "/ops", icon: Hammer },
-  { name: "Inventory", href: "/inventory", icon: Box },
+  { name: "Design", href: "/design", icon: Palette },
+  { name: "Inv", href: "/inventory", icon: Box },
   { name: "Finance", href: "/finance", icon: CircleDollarSign },
   { name: "Admin", href: "/admin", icon: ShieldHalf },
 ];

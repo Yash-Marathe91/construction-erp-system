@@ -7,6 +7,7 @@ import { formatINR } from "@/lib/utils";
 import { FinanceActions } from "@/components/FinanceActions";
 import { ExportPDFButton } from "@/components/ExportPDFButton";
 import { FullReportButton } from "@/components/FullReportButton";
+import { createServerSideClient } from "@/lib/supabase-server";
 
 export default async function FinancePage({
   searchParams,
@@ -14,17 +15,37 @@ export default async function FinancePage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const currentTab = (await searchParams).tab || "overview";
+  const supabase = await createServerSideClient();
 
-  const invoices = [
-    { id: 'INV-4029', supplier: 'Jai Mat Cement', amount: 45000, status: 'Pending', date: 'Oct 24, 2024' },
-    { id: 'INV-4028', supplier: 'Tata Steel Ltd', amount: 120000, status: 'Paid', date: 'Oct 20, 2024' },
-    { id: 'INV-4027', supplier: 'UltraTech Pro', amount: 35000, status: 'Overdue', date: 'Oct 15, 2024' },
-  ];
+  // Fetch real invoices from Supabase
+  const { data: dbInvoices } = await supabase
+    .from('invoices')
+    .select('*')
+    .order('created_at', { ascending: false });
 
-  const payments = [
-    { id: 'PAY-901', recipient: 'Mahindra Logistics', amount: 25000, method: 'Bank Transfer', date: 'Oct 23, 2024', type: 'Outgoing' },
-    { id: 'PAY-902', recipient: 'Client: DLF Phase 5', amount: 150000, method: 'Check', date: 'Oct 22, 2024', type: 'Incoming' },
-  ];
+  // Fetch real payments from Supabase
+  const { data: dbPayments } = await supabase
+    .from('payments')
+    .select('*')
+    .order('payment_date', { ascending: false });
+
+  // Map database fields to the UI format
+  const invoices = (dbInvoices || []).map(inv => ({
+    id: inv.invoice_number,
+    supplier: inv.vendor_name,
+    amount: inv.amount,
+    status: inv.status,
+    date: new Date(inv.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+  }));
+
+  const payments = (dbPayments || []).map(py => ({
+    id: py.id,
+    recipient: py.recipient,
+    amount: py.amount,
+    method: py.method,
+    date: new Date(py.payment_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+    type: py.type
+  }));
 
   return (
     <AppLayout>

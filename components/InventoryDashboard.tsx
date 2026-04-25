@@ -62,16 +62,17 @@ export function InventoryDashboard({
     let result = [...initialDeliveries];
     if (searchQuery) {
       result = result.filter(item => 
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.supplier.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.expected.toLowerCase().includes(searchQuery.toLowerCase())
+        (item.material_name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.supplier || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.expected_arrival || "").toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
     
     result.sort((a, b) => {
-      if (sortBy === "name-asc") return a.name.localeCompare(b.name);
-      if (sortBy === "name-desc") return b.name.localeCompare(a.name);
-      // Mock date sorting (assuming string format like "Today" or "Oct 25")
+      const nameA = a.material_name || "";
+      const nameB = b.material_name || "";
+      if (sortBy === "name-asc") return nameA.localeCompare(nameB);
+      if (sortBy === "name-desc") return nameB.localeCompare(nameA);
       return 0; 
     });
     return result;
@@ -81,15 +82,17 @@ export function InventoryDashboard({
     let result = [...initialRequests];
     if (searchQuery) {
       result = result.filter(item => 
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.requester.toLowerCase().includes(searchQuery.toLowerCase())
+        (item.material_name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.requester || "").toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
     
     result.sort((a, b) => {
-      if (sortBy === "name-asc") return a.name.localeCompare(b.name);
-      if (sortBy === "name-desc") return b.name.localeCompare(a.name);
-      if (sortBy === "priority") return b.priority === 'High' ? 1 : -1;
+      const nameA = a.material_name || "";
+      const nameB = b.material_name || "";
+      if (sortBy === "name-asc") return nameA.localeCompare(nameB);
+      if (sortBy === "name-desc") return nameB.localeCompare(nameA);
+      if (sortBy === "priority") return (b.priority === 'High' ? 1 : -1);
       return 0;
     });
     return result;

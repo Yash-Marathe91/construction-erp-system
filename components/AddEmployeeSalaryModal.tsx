@@ -20,6 +20,7 @@ export function AddEmployeeSalaryModal({ isOpen, onClose, onAdd }: AddEmployeeSa
     allowance: "15",
     medical: "500"
   });
+  const [customRole, setCustomRole] = useState("");
 
   if (!isOpen) return null;
 
@@ -52,7 +53,7 @@ export function AddEmployeeSalaryModal({ isOpen, onClose, onAdd }: AddEmployeeSa
                  />
               </div>
 
-              <div className="space-y-1.5 flex flex-col">
+              <div className={`space-y-1.5 flex flex-col ${formData.role === 'Other' ? 'col-span-1' : 'col-span-2'}`}>
                  <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Site Role</label>
                  <select 
                     className="w-full h-10 px-4 bg-gray-50 border border-gray-100 rounded-xl text-xs font-sans focus:outline-none focus:ring-2 focus:ring-[#182232]/10"
@@ -63,12 +64,33 @@ export function AddEmployeeSalaryModal({ isOpen, onClose, onAdd }: AddEmployeeSa
                     <option value="Mason">Mason</option>
                     <option value="Carpenter">Carpenter</option>
                     <option value="Electrician">Electrician</option>
+                    <option value="Plumber">Plumber</option>
+                    <option value="Painter">Painter</option>
+                    <option value="Steel Fixer">Steel Fixer</option>
                     <option value="Foreman">Foreman</option>
+                    <option value="Supervisor">Supervisor</option>
+                    <option value="Engineer">Civil Engineer</option>
                     <option value="Site Manager">Site Manager</option>
+                    <option value="Accountant">Accountant</option>
+                    <option value="Security Guard">Security Guard</option>
+                    <option value="Other">Other (Specify...)</option>
                  </select>
               </div>
 
-              <div className="space-y-1">
+              {formData.role === 'Other' && (
+                <div className="space-y-1.5 flex flex-col animate-in slide-in-from-left-2 duration-300">
+                   <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Specify Role</label>
+                   <input 
+                     type="text" 
+                     placeholder="e.g. Interior Designer"
+                     className="w-full h-10 px-4 bg-[#fff9ea] border border-[#feda5a]/30 rounded-xl text-xs font-sans focus:outline-none focus:ring-2 focus:ring-[#feda5a]/50"
+                     value={customRole}
+                     onChange={(e) => setCustomRole(e.target.value)}
+                   />
+                </div>
+              )}
+
+              <div className="space-y-1 col-span-2">
                 <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Base Monthly Pay (₹)</label>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><IndianRupee size={16} /></div>
@@ -123,7 +145,11 @@ export function AddEmployeeSalaryModal({ isOpen, onClose, onAdd }: AddEmployeeSa
 
            <Button 
              onClick={() => {
-               onAdd?.(formData);
+               const finalData = {
+                 ...formData,
+                 role: formData.role === 'Other' ? customRole : formData.role
+               };
+               onAdd?.(finalData);
                onClose();
              }}
              className="w-full h-12 bg-[#182232] hover:bg-[#2d3748] rounded-xl font-heading font-bold flex gap-2"

@@ -12,12 +12,16 @@ export default function AIArchitectureDesigner() {
   const handleGenerate = () => {
     if (!prompt.trim()) return;
     setIsGenerating(true);
+    
+    // Using Pollinations AI with architecture specific weighting
+    const encodedPrompt = encodeURIComponent(prompt + ", photorealistic architecture render, ultra detailed, cinematic lighting, 8k");
+    const newImage = `https://pollinations.ai/p/${encodedPrompt}?width=800&height=600&seed=${Math.floor(Math.random() * 1000)}&nologo=true`;
+    
     // Simulate generation delay
     setTimeout(() => {
-      // The single image that will be displayed every time
-      setGeneratedImage("https://image2url.com/r2/default/images/1775632975667-0d85da7c-954f-4caa-84f4-e1efe2ed637d.jpg");
+      setGeneratedImage(newImage);
       setIsGenerating(false);
-    }, 2000);
+    }, 1500);
   };
 
   const closeDialog = () => {

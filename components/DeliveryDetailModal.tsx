@@ -1,8 +1,8 @@
-"use client";
-
-import { X, Truck, Calendar, User, Phone, Mail, MapPin, Package, ShieldAlert, CheckCircle, Trash2, Edit3, ArrowRight } from "lucide-react";
+import { X, Truck, Calendar, User, Phone, Mail, MapPin, Package, ShieldAlert, CheckCircle, Trash2, Edit3, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { createClient } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 interface DeliveryDetailModalProps {
   isOpen: boolean;
@@ -11,9 +11,78 @@ interface DeliveryDetailModalProps {
 }
 
 export function DeliveryDetailModal({ isOpen, onClose, delivery }: DeliveryDetailModalProps) {
+  const router = useRouter();
+  const supabase = createClient();
   const [status, setStatus] = useState(delivery?.status || 'Pending');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   if (!isOpen || !delivery) return null;
+
+  const handleMarkReceived = async () => {
+    setIsProcessing(true);
+    try {
+      // 1. Update delivery status
+      const { error: delError } = await supabase
+        .from('deliveries')
+        .update({ status: 'Delivered' })
+        .eq('id', delivery.id);
+
+      if (delError) throw delError;
+
+      // 2. Fetch current stock of that material
+      const { data: materialData, error: matFetchErr } = await supabase
+        .from('materials')
+        .select('id, quantity')
+        .eq('name', delivery.material_name)
+        .single();
+
+      if (matFetchErr) {
+        console.warn("Could not find matching material in inventory to update stock automatically.");
+      } else {
+        // 3. Increment stock
+        const newQty = Number(materialData.quantity) + Number(delivery.quantity || 0);
+        await supabase
+          .from('materials')
+          .update({ quantity: newQty, restock_needed: false })
+          .eq('id', materialData.id);
+      }
+
+      // 4. AUTO-GENERATE INVOICE (New Finance Integration)
+      const invoiceNum = "INV-" + Math.floor(100000 + Math.random() * 900000);
+      const estimatedPrice = Number(delivery.quantity || 1) * 450; // Mock price: 450 per unit
+
+      await supabase.from('invoices').insert({
+        invoice_number: invoiceNum,
+        vendor_name: delivery.supplier,
+        amount: estimatedPrice,
+        status: 'Unpaid',
+        due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString(), // Due in 7 days
+        item_description: `Material Receipt: ${delivery.material_name} (${delivery.quantity || 0} Units)`
+      });
+
+      setStatus('Delivered');
+      router.refresh();
+      setTimeout(onClose, 1000);
+    } catch (err) {
+      console.error("Mark Received Error:", err);
+      alert("Failed to update status.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleCancelOrder = async () => {
+    if (!confirm("Are you sure you want to cancel this order?")) return;
+    setIsProcessing(true);
+    try {
+      await supabase.from('deliveries').update({ status: 'Cancelled' }).eq('id', delivery.id);
+      setStatus('Cancelled');
+      router.refresh();
+      setTimeout(onClose, 800);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const contactDetails = {
     dealer: "Nitin Malhotra",
@@ -24,7 +93,7 @@ export function DeliveryDetailModal({ isOpen, onClose, delivery }: DeliveryDetai
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
         
         {/* Header with Background Pattern */}
@@ -38,7 +107,7 @@ export function DeliveryDetailModal({ isOpen, onClose, delivery }: DeliveryDetai
                 <Truck className="w-8 h-8 text-[#feda5a]" />
               </div>
               <div>
-                <h2 className="text-2xl font-heading font-bold">{delivery.name}</h2>
+                <h2 className="text-2xl font-heading font-bold">{delivery.material_name}</h2>
                 <p className="text-[10px] uppercase font-bold tracking-widest text-gray-400 mt-0.5">Order ID: {delivery.id}</p>
               </div>
             </div>
@@ -51,13 +120,14 @@ export function DeliveryDetailModal({ isOpen, onClose, delivery }: DeliveryDetai
              <span className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-tight flex items-center gap-1.5 ${
                 status === 'In Transit' ? 'bg-[#feda5a] text-[#182232]' : 
                 status === 'Pending' ? 'bg-[#e7eeff] text-[#182232]' :
-                'bg-[#88f9b0] text-[#002813]'
+                status === 'Delivered' ? 'bg-[#88f9b0] text-[#002813]' :
+                'bg-red-100 text-red-700'
              }`}>
                 {status === 'In Transit' ? <ArrowRight className="w-3 h-3" /> : <CheckCircle className="w-3 h-3" />}
                 {status}
              </span>
              <span className="text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-tight bg-white/10 border border-white/20 flex items-center gap-1.5">
-                <Calendar className="w-3 h-3" /> {delivery.expected}
+                <Calendar className="w-3 h-3" /> {delivery.expected_arrival}
              </span>
           </div>
         </div>
@@ -107,7 +177,7 @@ export function DeliveryDetailModal({ isOpen, onClose, delivery }: DeliveryDetai
                  <div className="p-4 rounded-2xl border border-gray-100 bg-white shadow-sm flex flex-col gap-1">
                     <Package className="w-4 h-4 text-gray-400 mb-1" />
                     <p className="text-[10px] font-bold text-gray-400 uppercase">Item Quantity</p>
-                    <p className="text-lg font-heading font-bold text-[#182232]">22.5 <span className="text-xs font-sans text-gray-500">Tons</span></p>
+                    <p className="text-lg font-heading font-bold text-[#182232]">{delivery.quantity || 0} <span className="text-xs font-sans text-gray-500">Units</span></p>
                  </div>
                  <div className="p-4 rounded-2xl border border-gray-100 bg-white shadow-sm flex flex-col gap-1">
                     <ShieldAlert className="w-4 h-4 text-gray-400 mb-1" />
@@ -123,21 +193,24 @@ export function DeliveryDetailModal({ isOpen, onClose, delivery }: DeliveryDetai
               <div className="flex flex-col gap-3">
                  <div className="flex gap-3">
                     <Button 
-                      className="flex-1 h-12 bg-[#182232] hover:bg-[#2d3748] rounded-xl font-heading font-bold gap-2 shadow-lg shadow-[#182232]/10"
-                      onClick={() => setStatus('Delivered')}
+                      className="flex-1 h-12 bg-[#002813] hover:bg-[#004d26] rounded-xl font-heading font-bold gap-2 shadow-lg shadow-[#002813]/20 disabled:opacity-50"
+                      onClick={handleMarkReceived}
+                      disabled={status === 'Delivered' || status === 'Cancelled' || isProcessing}
                     >
-                       <Edit3 className="w-4 h-4" /> Update Delivery
+                       {isProcessing ? <Loader2 className="animate-spin w-4 h-4" /> : <CheckCircle className="w-4 h-4" />}
+                       {status === 'Delivered' ? 'Received' : 'Mark as Received'}
                     </Button>
                     <Button 
                       variant="outline"
-                      className="flex-1 h-12 border-2 border-[#ba1a1a] text-[#ba1a1a] hover:bg-[#ffdad6] rounded-xl font-heading font-bold gap-2"
-                      onClick={() => console.log('Cancel Order')}
+                      className="flex-1 h-12 border-2 border-[#ba1a1a] text-[#ba1a1a] hover:bg-[#ffdad6] rounded-xl font-heading font-bold gap-2 disabled:opacity-30"
+                      onClick={handleCancelOrder}
+                      disabled={status === 'Delivered' || status === 'Cancelled' || isProcessing}
                     >
                        <Trash2 className="w-4 h-4" /> Cancel Order
                     </Button>
                  </div>
                  <p className="text-[9px] text-center text-gray-400 font-sans italic">
-                    All actions are logged in the transaction audit ledger.
+                    Marking as received will automatically update your inventory stock.
                  </p>
               </div>
            </div>

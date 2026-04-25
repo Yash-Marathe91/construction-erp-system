@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { X, Save, Boxes, Plus, AlertCircle } from "lucide-react";
+import { X, Save, Boxes, Plus, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
+import { createClient } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 interface NewMaterialModalProps {
   isOpen: boolean;
@@ -10,11 +12,44 @@ interface NewMaterialModalProps {
 }
 
 export function NewMaterialModal({ isOpen, onClose }: NewMaterialModalProps) {
+  const router = useRouter();
+  const supabase = createClient();
   const [name, setName] = useState("");
   const [category, setCategory] = useState("Raw Materials");
   const [quantity, setQuantity] = useState(0);
   const [unit, setUnit] = useState("Units");
   const [threshold, setThreshold] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleRegister = async () => {
+    if (!name.trim()) return alert("Please enter a material name");
+    
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('materials').insert({
+        name,
+        category,
+        quantity,
+        unit,
+        low_stock_threshold: threshold,
+        restock_needed: quantity <= threshold
+      });
+
+      if (error) throw error;
+      
+      onClose();
+      router.refresh();
+      // Reset form
+      setName("");
+      setQuantity(0);
+      setThreshold(0);
+    } catch (err) {
+      console.error("Register Error:", err);
+      alert("Failed to register material. Check console.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -96,8 +131,13 @@ export function NewMaterialModal({ isOpen, onClose }: NewMaterialModalProps) {
           </div>
 
           <div className="pt-4">
-            <Button className="w-full h-12 bg-[#182232] hover:bg-[#2d3748] text-white font-heading font-bold shadow-lg flex gap-2">
-              <Plus className="w-5 h-5" /> Register Material
+            <Button 
+              onClick={handleRegister}
+              disabled={isSubmitting}
+              className="w-full h-12 bg-[#182232] hover:bg-[#2d3748] text-white font-heading font-bold shadow-lg flex gap-2"
+            >
+              {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
+              {isSubmitting ? "Registering..." : "Register Material"}
             </Button>
           </div>
         </div>

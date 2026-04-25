@@ -21,22 +21,29 @@ export function AttendanceSheetModal({ isOpen, onClose, workers, onAttendanceMar
   const markStatus = async (workerId: string, status: string) => {
     setLoadingId(workerId);
     try {
-      const today = new Date().toISOString().split('T')[0];
-      const checkInTime = status === 'Present' ? new Date().toLocaleTimeString('en-US', { hour12: false }) : null;
+      const today = new Date().toLocaleDateString('en-CA'); 
+      const checkInTime = status === 'Present' ? new Date().toLocaleTimeString('en-GB') : null;
       
-      const { error } = await supabase.from('attendance').upsert({
+      const payload = {
         worker_id: workerId,
         date: today,
         status: status,
         check_in_time: checkInTime,
         hours_worked: status === 'Present' ? 8 : 0
-      }, { onConflict: 'worker_id,date' });
+      };
 
-      if (!error) {
-        onAttendanceMarked(workerId, status);
+      console.log("Saving Attendance Payload:", payload);
+
+      const { error, data } = await supabase.from('attendance').upsert(payload, { onConflict: 'worker_id,date' }).select();
+
+      if (error) {
+        console.error("Supabase Save Error Details:", JSON.stringify(error, null, 2));
       } else {
-        console.error("Error marking attendance", error);
+        console.log("Supabase Save Success:", data);
+        onAttendanceMarked(workerId, status);
       }
+    } catch (err) {
+      console.error("Unexpected Backend Error:", err);
     } finally {
       setLoadingId(null);
     }
